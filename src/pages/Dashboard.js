@@ -1,19 +1,19 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import {
   Box,
   TextField,
   Button,
   Typography,
   Grid,
-  Paper
+  Paper,
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 
 import { apiBase } from "../config";
 import Http from "../Http";
@@ -100,7 +100,7 @@ class Dashboard extends Component {
     const { data, error } = this.state;
 
     return (
-      <div className="container py-5">
+      <Container maxWidth="md">
         <Box mb={6}>
           <Typography component="h2" variant="h3">
             Add a To Do
@@ -117,17 +117,22 @@ class Dashboard extends Component {
               direction="row"
               justify="flex-start"
               alignItems="stretch"
+              spacing={2}
             >
-              <TextField
-                name="todo"
-                label="Add a New To Do"
-                onChange={this.handleChange}
-                variant="filled"
-              />
-              <Button type="submit" variant="contained" color="primary">
-                Add
-                <AddIcon>+</AddIcon>
-              </Button>
+              <Grid item>
+                <TextField
+                  name="todo"
+                  label="Add a New To Do"
+                  onChange={this.handleChange}
+                  variant="filled"
+                />
+              </Grid>
+              <Grid item>
+                <Button type="submit" variant="contained" color="primary">
+                  Add
+                  <AddIcon>+</AddIcon>
+                </Button>
+              </Grid>
             </Grid>
           </form>
         </Box>
@@ -138,48 +143,41 @@ class Dashboard extends Component {
           </div>
         )}
 
-        <div className="todos">
-          <Typography component="h2" variant="h3">
-            Open To Dos
-          </Typography>
-          <Paper>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>To Do</TableCell>
-                  <TableCell align="right">Action</TableCell>
+        <Typography component="h2" variant="h3">
+          Open To Dos
+        </Typography>
+        <Paper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>To Do</TableCell>
+                <TableCell align="right">Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.map(row => (
+                <TableRow key={row.id}>
+                  <TableCell component="th" scope="row">
+                    {row.value}
+                  </TableCell>
+                  <TableCell align="right">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={this.closeTodo}
+                      data-key={row.id}
+                    >
+                      Close
+                    </button>
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.map(row => (
-                  <TableRow key={row.id}>
-                    <TableCell component="th" scope="row">
-                      {row.value}
-                    </TableCell>
-                    <TableCell align="right">
-                      <button
-                        type="button"
-                        className="btn btn-secondary"
-                        onClick={this.closeTodo}
-                        data-key={row.id}
-                      >
-                        Close
-                      </button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
-        </div>
-      </div>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Container>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.Auth.isAuthenticated,
-  user: state.Auth.user
-});
-
-export default connect(mapStateToProps)(Dashboard);
+export default Dashboard;
