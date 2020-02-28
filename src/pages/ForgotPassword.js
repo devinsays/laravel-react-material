@@ -1,198 +1,165 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import ReeValidate from "ree-validate";
-import classNames from "classnames";
+import isEmail from "validator/es/lib/isEmail";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Paper,
+  CircularProgress
+} from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
+
 import AuthService from "../services";
 
-class ForgotPassword extends Component {
-  constructor() {
-    super();
+function ForgotPassword(props) {
+  // State hooks.
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(null);
+  const [response, setResponse] = useState({
+    error: false,
+    message: ""
+  });
 
-    this.validator = new ReeValidate({
-      email: "required|email"
-    });
-
-    this.state = {
-      loading: false,
-      email: "",
-      errors: {},
-      response: {
-        error: false,
-        message: ""
-      }
-    };
-  }
-
-  handleChange = e => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
 
-    // If a field has a validation error, we'll clear it when corrected.
-    const { errors } = this.state;
-    if (name in errors) {
-      const validation = this.validator.errors;
-      this.validator.validate(name, value).then(() => {
-        if (!validation.has(name)) {
-          delete errors[name];
-          this.setState({ errors });
-        }
-      });
+    if (name === "email") {
+      setEmail(value);
+      if (emailError) {
+        setEmailError(null);
+      }
+      return;
     }
   };
 
-  handleBlur = e => {
+  const handleBlur = e => {
     const { name, value } = e.target;
-    const validation = this.validator.errors;
 
     // Avoid validation until input has a value.
     if (value === "") {
       return;
     }
 
-    this.validator.validate(name, value).then(() => {
-      if (validation.has(name)) {
-        const { errors } = this.state;
-        errors[name] = validation.first(name);
-        this.setState({ errors });
-      }
-    });
+    if (name === "email") {
+      setEmail(value);
+      validateEmail(value);
+      return;
+    }
   };
 
-  handleSubmit = e => {
+  const validateEmail = (value = email) => {
+    if (!isEmail(value)) {
+      setEmailError("The email field must be a valid email.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = e => {
     e.preventDefault();
-    const credentials = {
-      email: this.state.email
-    };
 
-    // Set response state back to default.
-    this.setState({ response: { error: false, message: "" } });
+    // If validation passes, submit.
+    const emailValidates = validateEmail();
 
-    this.validator.validateAll(credentials).then(success => {
-      if (success) {
-        this.setState({ loading: true });
-        this.submit(credentials);
-      }
-    });
+    if (emailValidates) {
+      setLoading(true);
+      submit({ email });
+    }
   };
 
-  submit(credentials) {
-    this.props
+  const submit = credentials => {
+    props
       .dispatch(AuthService.resetPassword(credentials))
-      .then(res => {
-        this.forgotPasswordForm.reset();
-        const response = {
-          error: false,
-          message: res.message
-        };
-        this.setState({ loading: false, success: true, response });
+      .then(() => {
+        setLoading(false);
+        setSuccess(true);
       })
       .catch(err => {
-        this.forgotPasswordForm.reset();
         const errors = Object.values(err.errors);
         errors.join(" ");
         const response = {
           error: true,
           message: errors
         };
-        this.setState({ response });
-        this.setState({ loading: false });
+        setResponse(response);
+        setLoading(false);
       });
-  }
+  };
 
-  render() {
-    // If user is already authenticated we redirect to entry location.
-    const { from } = this.props.location.state || { from: { pathname: "/" } };
-    const { isAuthenticated } = this.props;
-    if (isAuthenticated) {
-      return <Redirect to={from} />;
-    }
+  // Styles.
+  const classes = useStyles();
 
-    const { response, errors, loading } = this.state;
-
-    return (
-      <div>
-        <div className="d-flex flex-column flex-row align-content-center py-5">
-          <div className="container">
-            <div className="row">
-              <div className="section-login col-lg-6 ml-auto mr-auto">
-                <h4>Request Password Reset</h4>
-
-                <div className="card-login card mb-3">
-                  <div className="card-body">
-                    {this.state.success && (
-                      <div
-                        className="alert alert-success text-center"
-                        role="alert"
-                      >
-                        A password reset link has been sent!
-                      </div>
-                    )}
-
-                    {response.error && (
-                      <div
-                        className="alert alert-danger text-center"
-                        role="alert"
-                      >
-                        {response.message}
-                      </div>
-                    )}
-
-                    {!this.state.success && (
-                      <form
-                        className="form-horizontal"
-                        method="POST"
-                        onSubmit={this.handleSubmit}
-                        ref={el => {
-                          this.forgotPasswordForm = el;
-                        }}
-                      >
-                        <div className="form-group">
-                          <label htmlFor="email">Email Address</label>
-                          <input
-                            id="email"
-                            type="email"
-                            name="email"
-                            className={classNames("form-control", {
-                              "is-invalid": "email" in errors
-                            })}
-                            placeholder="Enter email"
-                            required
-                            onChange={this.handleChange}
-                            onBlur={this.handleBlur}
-                            disabled={loading}
-                          />
-
-                          {"email" in errors && (
-                            <div className="invalid-feedback">
-                              {errors.email}
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="form-group text-center">
-                          <button
-                            type="submit"
-                            className={classNames("btn btn-primary", {
-                              "btn-loading": loading
-                            })}
-                          >
-                            Send Password Reset Email
-                          </button>
-                        </div>
-                      </form>
-                    )}
-                  </div>
+  return (
+    <Container maxWidth="sm">
+      <Typography component="h3" variant="h3" align="center">
+        Request Password Reset
+      </Typography>
+      <Paper elevation={3}>
+        <Box p={4} pb={3}>
+          {success && (
+            <MuiAlert severity="success">
+              A password reset link has been sent!
+            </MuiAlert>
+          )}
+          {!success && (
+            <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+              {response.error && (
+                <MuiAlert severity="error">{response.message}</MuiAlert>
+              )}
+              <Box mb={3}></Box>
+              <Box mb={2}>
+                <div>
+                  <TextField
+                    name="email"
+                    label="Email Address"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    disabled={loading}
+                    variant="filled"
+                    fullWidth
+                    error={emailError !== null}
+                    helperText={emailError}
+                  />
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+              </Box>
+              <Box mb={2}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  fullWidth
+                  type="submit"
+                >
+                  {!loading && <span>Send Password Reset Email</span>}
+                  {loading && (
+                    <CircularProgress
+                      size={24}
+                      thickness={4}
+                      className={classes.loader}
+                    />
+                  )}
+                </Button>
+              </Box>
+            </form>
+          )}
+        </Box>
+      </Paper>
+    </Container>
+  );
 }
+
+const useStyles = makeStyles(() => ({
+  loader: {
+    color: "#fff"
+  }
+}));
 
 ForgotPassword.defaultProps = {
   location: {
