@@ -1,243 +1,267 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import ReeValidate from "ree-validate";
-import classNames from "classnames";
+import isEmail from "validator/es/lib/isEmail";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Paper,
+  CircularProgress
+} from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
+
 import AuthService from "../services";
 
-class ResetPassword extends Component {
-  constructor(props) {
-    super(props);
+function ForgotPassword(props) {
+  // State hooks.
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(null);
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [passwordConfirmError, setPasswordConfirmError] = useState(null);
+  const [response, setResponse] = useState({
+    error: false,
+    message: ""
+  });
 
-    // @TODO Password confirmation validation.
-    this.validator = new ReeValidate({
-      password: "required|min:6",
-      password_confirmation: "required|min:6",
-      id: "required",
-      token: "required"
-    });
-
-    this.state = {
-      loading: false,
-      id: this.getResetId(),
-      token: this.getResetToken(),
-      password: "",
-      password_confirmation: "",
-      errors: {},
-      response: {
-        error: false,
-        message: ""
-      }
-    };
-  }
-
-  getResetId() {
-    const params = new URLSearchParams(this.props.location.search);
-    if (params.has("id")) {
-      return params.get("id");
-    }
-    return "";
-  }
-
-  getResetToken() {
-    const params = new URLSearchParams(this.props.location.search);
-    if (params.has("token")) {
-      return params.get("token");
-    }
-    return "";
-  }
-
-  handleChange = e => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
 
-    // If a field has a validation error, we'll clear it when corrected.
-    const { errors } = this.state;
-    if (name in errors) {
-      const validation = this.validator.errors;
-      this.validator.validate(name, value).then(() => {
-        if (!validation.has(name)) {
-          delete errors[name];
-          this.setState({ errors });
-        }
-      });
+    if (name === "password") {
+      setPassword(value);
+      if (passwordError) {
+        setPasswordError(null);
+      }
+      return;
+    }
+
+    if (name === "passwordConfirm") {
+      setPasswordConfirm(value);
+      if (passwordConfirmError) {
+        setPasswordConfirmError(null);
+      }
+      return;
+    }
+
+    if (name === "password") {
+      setPassword(value);
+      validatePassword(value);
+      return;
+    }
+
+    if (name === "passwordConfirm") {
+      setPasswordConfirm(value);
+      validatePasswordConfirm(value);
+      return;
     }
   };
 
-  handleBlur = e => {
+  const handleBlur = e => {
     const { name, value } = e.target;
-    const validation = this.validator.errors;
 
     // Avoid validation until input has a value.
     if (value === "") {
       return;
     }
 
-    this.validator.validate(name, value).then(() => {
-      if (validation.has(name)) {
-        const { errors } = this.state;
-        errors[name] = validation.first(name);
-        this.setState({ errors });
-      }
-    });
+    if (name === "password") {
+      setPassword(value);
+      validatePassword(value);
+      return;
+    }
+
+    if (name === "passwordConfirm") {
+      setPasswordConfirm(value);
+      validatePasswordConfirm(value);
+      return;
+    }
   };
 
-  handleSubmit = e => {
+  const validatePassword = (value = password) => {
+    if (value.length < 6) {
+      setPasswordError("The password field must be at least 6 characters.");
+      return false;
+    }
+    return true;
+  };
+
+  const validatePasswordConfirm = (value = passwordConfirm) => {
+    if (value.length < 6) {
+      setPasswordConfirmError(
+        "The password field must be at least 6 characters."
+      );
+      return false;
+    }
+    if (password !== value) {
+      setPasswordConfirmError("Password confirmation does not match password.");
+    }
+    return true;
+  };
+
+  const handleSubmit = e => {
     e.preventDefault();
-    const credentials = {
-      id: this.state.id,
-      token: this.state.token,
-      password: this.state.password,
-      password_confirmation: this.state.password_confirmation
+
+    // If validation passes, submit.
+    const passwordValidates = validatePassword();
+    const passwordConfirmValidates = validatePasswordConfirm();
+
+    if (passwordValidates && passwordConfirmValidates) {
+      setLoading(true);
+      submit({
+        password,
+        password_confirmation: passwordConfirm
+      });
+    }
+  };
+
+  const getResetId = () => {
+    const params = new URLSearchParams(props.location.search);
+    if (params.has("id")) {
+      return params.get("id");
+    }
+    return "";
+  };
+
+  const getResetToken = () => {
+    const params = new URLSearchParams(props.location.search);
+    if (params.has("token")) {
+      return params.get("token");
+    }
+    return "";
+  };
+
+  const submit = credentials => {
+    const payload = {
+      id: getResetId(),
+      token: getResetToken(),
+      ...credentials
     };
-
-    this.setState({ loading: true });
-
-    this.props
-      .dispatch(AuthService.updatePassword(credentials))
-      .then(res => {
-        this.passwordResetForm.reset();
-        const response = {
-          error: false,
-          message: res.message
-        };
-        this.setState({ loading: false, success: true, response });
+    props
+      .dispatch(AuthService.updatePassword(payload))
+      .then(() => {
+        setLoading(false);
+        setSuccess(true);
       })
       .catch(err => {
-        this.passwordResetForm.reset();
         const errors = Object.values(err.errors);
         errors.join(" ");
         const response = {
           error: true,
           message: errors
         };
-        this.setState({ response });
-        this.setState({ loading: false });
+        setResponse(response);
+        setLoading(false);
       });
   };
 
-  render() {
-    // If user is already authenticated we redirect to entry location.
-    const { from } = this.props.location.state || { from: { pathname: "/" } };
-    const { isAuthenticated } = this.props;
-    if (isAuthenticated) {
-      return <Redirect to={from} />;
-    }
+  // Styles.
+  const classes = useStyles();
 
-    const { response, errors, loading } = this.state;
-
-    return (
-      <div>
-        <div className="d-flex flex-column flex-row align-content-center py-5">
-          <div className="container">
-            <div className="row">
-              <div className="section-login col-lg-6 ml-auto mr-auto">
-                <h4>Password Reset</h4>
-
-                <div className="card-login card mb-3">
-                  <div className="card-body">
-                    {this.state.success && (
-                      <div
-                        className="alert alert-success text-center"
-                        role="alert"
-                      >
-                        Your password has been reset!
-                      </div>
-                    )}
-
-                    {response.error && (
-                      <div
-                        className="alert alert-danger text-center"
-                        role="alert"
-                      >
-                        {response.message}
-                      </div>
-                    )}
-
-                    {!this.state.success && (
-                      <form
-                        className="form-horizontal"
-                        method="POST"
-                        onSubmit={this.handleSubmit}
-                        ref={el => {
-                          this.passwordResetForm = el;
-                        }}
-                      >
-                        <div className="form-group">
-                          <label htmlFor="password">Password</label>
-                          <input
-                            id="password"
-                            type="password"
-                            className={classNames("form-control", {
-                              "is-invalid": "password" in errors
-                            })}
-                            name="password"
-                            placeholder="Enter password"
-                            required
-                            onChange={this.handleChange}
-                            onBlur={this.handleBlur}
-                          />
-                          {"password" in errors && (
-                            <div className="invalid-feedback">
-                              {errors.password}
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="form-group">
-                          <label htmlFor="password_confirmation">
-                            Password Confirmation
-                          </label>
-                          <input
-                            id="password_confirmation"
-                            type="password"
-                            className={classNames("form-control", {
-                              "is-invalid": "password_confirmation" in errors
-                            })}
-                            name="password_confirmation"
-                            placeholder="Confirm password"
-                            required
-                            onChange={this.handleChange}
-                            onBlur={this.handleBlur}
-                          />
-                          {"password_confirmation" in errors && (
-                            <div className="invalid-feedback">
-                              {errors.password_confirmation}
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="form-group text-center">
-                          <button
-                            type="submit"
-                            className={classNames("btn btn-primary", {
-                              "btn-loading": loading
-                            })}
-                          >
-                            Reset Password
-                          </button>
-                        </div>
-                      </form>
-                    )}
-                  </div>
+  return (
+    <Container maxWidth="sm">
+      <Typography component="h3" variant="h3" align="center">
+        Reset Your Password
+      </Typography>
+      <Paper elevation={3}>
+        <Box p={4} pb={3}>
+          {success && (
+            <MuiAlert severity="success">
+              Your password has been reset!
+            </MuiAlert>
+          )}
+          {!success && (
+            <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+              {response.error && (
+                <MuiAlert severity="error">{response.message}</MuiAlert>
+              )}
+              <Box mb={3}></Box>
+              <Box mb={2}>
+                <div>
+                  <TextField
+                    name="password"
+                    label="Password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    disabled={loading}
+                    variant="filled"
+                    fullWidth
+                    error={passwordError !== null}
+                    helperText={passwordError}
+                    type="password"
+                  />
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+                <div>
+                  <TextField
+                    name="passwordConfirm"
+                    label="Confirm Password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    disabled={loading}
+                    variant="filled"
+                    fullWidth
+                    error={passwordConfirmError !== null}
+                    helperText={passwordConfirmError}
+                    type="password"
+                  />
+                </div>
+              </Box>
+              <Box mb={2}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  fullWidth
+                  type="submit"
+                >
+                  {!loading && <span>Send Password Reset Email</span>}
+                  {loading && (
+                    <CircularProgress
+                      size={24}
+                      thickness={4}
+                      className={classes.loader}
+                    />
+                  )}
+                </Button>
+              </Box>
+            </form>
+          )}
+        </Box>
+      </Paper>
+    </Container>
+  );
 }
 
-ResetPassword.propTypes = {
+const useStyles = makeStyles(() => ({
+  loader: {
+    color: "#fff"
+  }
+}));
+
+ForgotPassword.defaultProps = {
+  location: {
+    state: {
+      pathname: "/"
+    }
+  }
+};
+
+ForgotPassword.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired,
+  location: PropTypes.shape({
+    state: {
+      pathname: PropTypes.string
+    }
+  })
 };
 
 const mapStateToProps = state => ({
   isAuthenticated: state.Auth.isAuthenticated
 });
 
-export default connect(mapStateToProps)(ResetPassword);
+export default connect(mapStateToProps)(ForgotPassword);
