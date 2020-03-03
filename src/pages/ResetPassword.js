@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import isEmail from "validator/es/lib/isEmail";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Container,
