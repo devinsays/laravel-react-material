@@ -1,6 +1,19 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import classNames from "classnames";
+import {
+  Box,
+  Button,
+  Typography,
+  Paper,
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  CircularProgress
+} from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 
 import { apiBase } from "../config";
 import Http from "../Http";
@@ -86,69 +99,77 @@ class Archive extends Component {
     const todos = Array.from(this.state.data);
 
     return (
-      <div className="container py-5">
-        <h1 className="text-center mb-4">To Do Archive</h1>
+      <Container maxWidth="md">
+        {error && <MuiAlert severity="error">{error}</MuiAlert>}
 
-        {error && (
-          <div className="text-center">
-            <p>{error}</p>
-          </div>
-        )}
+        <Typography component="h2" variant="h3">
+          Archive
+        </Typography>
 
-        <table className="table">
-          <tbody>
-            <tr>
-              <th>Time</th>
-              <th>To Do</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-            {todos.map(todo => (
-              <tr key={todo.id}>
-                <td>{todo.created_at}</td>
-                <td>{todo.value}</td>
-                <td>{todo.status}</td>
-                <td>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={this.deleteTodo}
-                    data-key={todo.id}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <Box mb={4}>
+          <Paper>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Time</TableCell>
+                  <TableCell>To Do</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {todos.map(todo => (
+                  <TableRow key={todo.id}>
+                    <TableCell component="th" scope="row">
+                      {todo.created_at}
+                    </TableCell>
+                    <TableCell>{todo.value}</TableCell>
+                    <TableCell>{todo.status}</TableCell>
+                    <TableCell>
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={this.deleteTodo}
+                        data-key={todo.id}
+                      >
+                        Delete
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        </Box>
 
         {apiMore && (
-          <div className="text-center">
-            <button
-              className={classNames("btn btn-primary", {
-                "btn-loading": loading
-              })}
-              onClick={this.loadMore}
-            >
-              Load More
-            </button>
-          </div>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={loading}
+            fullWidth
+            type="submit"
+            onClick={this.loadMore}
+          >
+            {!loading && <span>Load More</span>}
+            {loading && (
+              <CircularProgress
+                size={24}
+                thickness={4}
+                // className={classes.loader}
+              />
+            )}
+          </Button>
         )}
 
         {apiMore === null && this.state.moreLoaded === true && (
-          <div className="text-center">
-            <p>Everything loaded.</p>
-          </div>
+          <Typography variant="body2" align="center">
+            Everything loaded.
+          </Typography>
         )}
-      </div>
+      </Container>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.Auth.isAuthenticated,
-  user: state.Auth.user
-});
-
-export default connect(mapStateToProps)(Archive);
+export default Archive;

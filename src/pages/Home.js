@@ -8,7 +8,7 @@ export default function Home() {
     <Grid container spacing={2} justify="center" alignItems="center">
       <Grid item xs={12} sm={6}>
         <Typography component="h2" variant="h3">
-          Example To Do App
+          Example Tasks App
         </Typography>
         <Box py={2} pr={4}>
           <Typography>

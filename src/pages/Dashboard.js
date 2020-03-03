@@ -24,6 +24,7 @@ export default function Dashboard() {
   const [error, setError] = useState(false);
   const [data, setData] = useState([]);
 
+  // API Path
   const api = `${apiBase}/api/v1/todo`;
 
   // Effect runs once on mount.
@@ -85,7 +86,7 @@ export default function Dashboard() {
     <Container maxWidth="md">
       <Box mb={6}>
         <Typography component="h2" variant="h3">
-          Add a To Do
+          Add a Task
         </Typography>
         <form method="post" onSubmit={handleSubmit}>
           <Grid
@@ -98,7 +99,7 @@ export default function Dashboard() {
             <Grid item>
               <TextField
                 name="todo"
-                label="Add a New To Do"
+                label="New Task"
                 onChange={handleChange}
                 value={todo}
                 variant="filled"
@@ -121,7 +122,7 @@ export default function Dashboard() {
       )}
 
       <Typography component="h2" variant="h3">
-        Open To Dos
+        Open Tasks
       </Typography>
       <Paper>
         <Table>

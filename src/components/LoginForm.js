@@ -117,7 +117,7 @@ function LoginForm(props) {
   // If user is already authenticated we redirect to entry location.
   const { isAuthenticated } = props;
   if (isAuthenticated) {
-    const { from } = props.location.state || { from: { pathname: "/" } };
+    const { from } = props.location?.state || { from: { pathname: "/" } };
     return <Redirect to={from} />;
   }
 
