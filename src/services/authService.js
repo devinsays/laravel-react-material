@@ -14,7 +14,7 @@ export function login(credentials) {
           const { status, errors } = err.response.data;
           const data = {
             status,
-            errors
+            errors: errors ? errors : ["Unknown error."]
           };
           return reject(data);
         });
