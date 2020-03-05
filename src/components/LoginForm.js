@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   TextField,
   Button,
@@ -10,37 +10,37 @@ import {
   Box,
   Paper,
   CircularProgress
-} from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
+} from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 
-import AuthService from "../services";
-import { validateEmail, validatePassword } from "../utils/validation.js";
+import AuthService from '../services';
+import { validateEmail, validatePassword } from '../utils/validation.js';
 
 function LoginForm(props) {
   // State hooks.
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState({
-    value: "",
+    value: '',
     error: false
   });
   const [password, setPassword] = useState({
-    value: "",
+    value: '',
     error: false
   });
   const [response, setResponse] = useState({
     error: false,
-    message: ""
+    message: ''
   });
 
   const handleChange = e => {
     const { name, value } = e.target;
 
-    if (name === "email") {
+    if (name === 'email') {
       setEmail({ value, error: false });
       return;
     }
 
-    if (name === "password") {
+    if (name === 'password') {
       setPassword({ value, error: false });
       return;
     }
@@ -50,16 +50,16 @@ function LoginForm(props) {
     const { name, value } = e.target;
 
     // Avoid validation until input has a value.
-    if (value === "") {
+    if (value === '') {
       return;
     }
 
-    if (name === "email") {
+    if (name === 'email') {
       setEmail({ value, error: validateEmail(value) });
       return;
     }
 
-    if (name === "password") {
+    if (name === 'password') {
       setPassword({ value, error: validatePassword(value) });
       return;
     }
@@ -77,15 +77,15 @@ function LoginForm(props) {
   const submit = credentials => {
     props.dispatch(AuthService.login(credentials)).catch(err => {
       const errors = Object.values(err.errors);
-      errors.join(" ");
+      errors.join(' ');
       const response = {
         error: true,
         message: errors
       };
       setResponse(response);
       setLoading(false);
-      setEmail({ value: "", error: false });
-      setPassword({ value: "", error: false });
+      setEmail({ value: '', error: false });
+      setPassword({ value: '', error: false });
     });
   };
 
@@ -95,7 +95,7 @@ function LoginForm(props) {
   // If user is already authenticated we redirect to entry location.
   const { isAuthenticated } = props;
   if (isAuthenticated) {
-    const { from } = props.location?.state || { from: { pathname: "/" } };
+    const { from } = props.location?.state || { from: { pathname: '/' } };
     return <Redirect to={from} />;
   }
 

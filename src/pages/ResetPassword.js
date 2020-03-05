@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Container,
   TextField,
@@ -10,28 +10,28 @@ import {
   Box,
   Paper,
   CircularProgress
-} from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
+} from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 
-import AuthService from "../services";
+import AuthService from '../services';
 
 function ForgotPassword(props) {
   // State hooks.
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(null);
-  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [passwordConfirmError, setPasswordConfirmError] = useState(null);
   const [response, setResponse] = useState({
     error: false,
-    message: ""
+    message: ''
   });
 
   const handleChange = e => {
     const { name, value } = e.target;
 
-    if (name === "password") {
+    if (name === 'password') {
       setPassword(value);
       if (passwordError) {
         setPasswordError(null);
@@ -39,7 +39,7 @@ function ForgotPassword(props) {
       return;
     }
 
-    if (name === "passwordConfirm") {
+    if (name === 'passwordConfirm') {
       setPasswordConfirm(value);
       if (passwordConfirmError) {
         setPasswordConfirmError(null);
@@ -47,13 +47,13 @@ function ForgotPassword(props) {
       return;
     }
 
-    if (name === "password") {
+    if (name === 'password') {
       setPassword(value);
       validatePassword(value);
       return;
     }
 
-    if (name === "passwordConfirm") {
+    if (name === 'passwordConfirm') {
       setPasswordConfirm(value);
       validatePasswordConfirm(value);
       return;
@@ -64,17 +64,17 @@ function ForgotPassword(props) {
     const { name, value } = e.target;
 
     // Avoid validation until input has a value.
-    if (value === "") {
+    if (value === '') {
       return;
     }
 
-    if (name === "password") {
+    if (name === 'password') {
       setPassword(value);
       validatePassword(value);
       return;
     }
 
-    if (name === "passwordConfirm") {
+    if (name === 'passwordConfirm') {
       setPasswordConfirm(value);
       validatePasswordConfirm(value);
       return;
@@ -83,7 +83,7 @@ function ForgotPassword(props) {
 
   const validatePassword = (value = password) => {
     if (value.length < 6) {
-      setPasswordError("The password field must be at least 6 characters.");
+      setPasswordError('The password field must be at least 6 characters.');
       return false;
     }
     return true;
@@ -92,12 +92,12 @@ function ForgotPassword(props) {
   const validatePasswordConfirm = (value = passwordConfirm) => {
     if (value.length < 6) {
       setPasswordConfirmError(
-        "The password field must be at least 6 characters."
+        'The password field must be at least 6 characters.'
       );
       return false;
     }
     if (password !== value) {
-      setPasswordConfirmError("Password confirmation does not match password.");
+      setPasswordConfirmError('Password confirmation does not match password.');
     }
     return true;
   };
@@ -120,18 +120,18 @@ function ForgotPassword(props) {
 
   const getResetId = () => {
     const params = new URLSearchParams(props.location.search);
-    if (params.has("id")) {
-      return params.get("id");
+    if (params.has('id')) {
+      return params.get('id');
     }
-    return "";
+    return '';
   };
 
   const getResetToken = () => {
     const params = new URLSearchParams(props.location.search);
-    if (params.has("token")) {
-      return params.get("token");
+    if (params.has('token')) {
+      return params.get('token');
     }
-    return "";
+    return '';
   };
 
   const submit = credentials => {
@@ -148,7 +148,7 @@ function ForgotPassword(props) {
       })
       .catch(err => {
         const errors = Object.values(err.errors);
-        errors.join(" ");
+        errors.join(' ');
         const response = {
           error: true,
           message: errors
@@ -237,14 +237,14 @@ function ForgotPassword(props) {
 
 const useStyles = makeStyles(() => ({
   loader: {
-    color: "#fff"
+    color: '#fff'
   }
 }));
 
 ForgotPassword.defaultProps = {
   location: {
     state: {
-      pathname: "/"
+      pathname: '/'
     }
   }
 };

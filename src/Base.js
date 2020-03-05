@@ -1,8 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Box, Container } from "@material-ui/core";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Box, Container } from '@material-ui/core';
 
-import Header from "./components/Header";
+import Header from './components/Header';
 
 const Base = ({ children }) => (
   <>

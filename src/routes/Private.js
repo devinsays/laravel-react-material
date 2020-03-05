@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Route, Redirect } from "react-router";
-import { connect } from "react-redux";
-import Base from "../Base";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Route, Redirect } from 'react-router';
+import { connect } from 'react-redux';
+import Base from '../Base';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
@@ -15,7 +15,7 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
       ) : (
         <Redirect
           to={{
-            pathname: "/login",
+            pathname: '/login',
             state: { from: props.location }
           }}
         />

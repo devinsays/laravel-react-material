@@ -1,7 +1,7 @@
-import React from "react";
-import { Typography, Grid, Box } from "@material-ui/core";
+import React from 'react';
+import { Typography, Grid, Box } from '@material-ui/core';
 
-import LoginForm from "../components/LoginForm";
+import LoginForm from '../components/LoginForm';
 
 export default function Home() {
   return (

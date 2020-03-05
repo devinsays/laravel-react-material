@@ -1,9 +1,9 @@
-import axios from "axios";
-import store from "./store";
+import axios from 'axios';
+import store from './store';
 
-import * as actions from "./store/actions";
+import * as actions from './store/actions';
 
-const token = localStorage.getItem("access_token");
+const token = localStorage.getItem('access_token');
 axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
 axios.interceptors.response.use(

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   TextField,
@@ -12,15 +12,15 @@ import {
   TableCell,
   TableHead,
   TableRow
-} from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
+} from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
-import { apiBase } from "../config";
-import Http from "../Http";
+import { apiBase } from '../config';
+import Http from '../Http';
 
 export default function Dashboard() {
   // State hooks.
-  const [todo, setTodo] = useState("");
+  const [todo, setTodo] = useState('');
   const [error, setError] = useState(false);
   const [data, setData] = useState([]);
 
@@ -36,7 +36,7 @@ export default function Dashboard() {
         setError(false);
       })
       .catch(() => {
-        setError("Unable to fetch data.");
+        setError('Unable to fetch data.');
       });
   }, [api]);
 
@@ -59,10 +59,10 @@ export default function Dashboard() {
         };
         const allTodos = [newItem, ...data];
         setData(allTodos);
-        setTodo("");
+        setTodo('');
       })
       .catch(() => {
-        setError("Sorry, there was an error saving your to do.");
+        setError('Sorry, there was an error saving your to do.');
       });
   };
 
@@ -70,7 +70,7 @@ export default function Dashboard() {
     const { key } = e.target.dataset;
     const todos = data;
 
-    Http.patch(`${api}/${key}`, { status: "closed" })
+    Http.patch(`${api}/${key}`, { status: 'closed' })
       .then(() => {
         const updatedTodos = todos.filter(
           todo => todo.id !== parseInt(key, 10)
@@ -78,7 +78,7 @@ export default function Dashboard() {
         setData(updatedTodos);
       })
       .catch(() => {
-        setError("Sorry, there was an error closing your to do.");
+        setError('Sorry, there was an error closing your to do.');
       });
   };
 

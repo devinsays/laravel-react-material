@@ -1,8 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import {
   AppBar,
   Toolbar,
@@ -10,9 +10,9 @@ import {
   IconButton,
   Menu,
   MenuItem
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import * as actions from "../store/actions";
+import * as actions from '../store/actions';
 
 function Header(props) {
   const classes = useStyles();
@@ -31,7 +31,7 @@ function Header(props) {
 
   const handleArchive = () => {
     setAnchorEl(null);
-    history.push("/archive");
+    history.push('/archive');
   };
 
   const handleLogout = () => {
@@ -62,13 +62,13 @@ function Header(props) {
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: "top",
-                horizontal: "right"
+                vertical: 'top',
+                horizontal: 'right'
               }}
               keepMounted
               transformOrigin={{
-                vertical: "top",
-                horizontal: "right"
+                vertical: 'top',
+                horizontal: 'right'
               }}
               open={open}
               onClose={handleClose}
@@ -89,7 +89,7 @@ const useStyles = makeStyles(theme => ({
   },
   titleLink: {
     color: theme.text,
-    textDecoration: "none"
+    textDecoration: 'none'
   }
 }));
 

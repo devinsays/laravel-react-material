@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Route } from "react-router";
-import { connect } from "react-redux";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Route } from 'react-router';
+import { connect } from 'react-redux';
 
-import Base from "../Base";
+import Base from '../Base';
 
 const SplitRoute = ({
   component: Component,

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import isEmail from "validator/es/lib/isEmail";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import isEmail from 'validator/es/lib/isEmail';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Container,
   TextField,
@@ -11,26 +11,26 @@ import {
   Box,
   Paper,
   CircularProgress
-} from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
+} from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 
-import AuthService from "../services";
+import AuthService from '../services';
 
 function ForgotPassword(props) {
   // State hooks.
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(null);
   const [response, setResponse] = useState({
     error: false,
-    message: ""
+    message: ''
   });
 
   const handleChange = e => {
     const { name, value } = e.target;
 
-    if (name === "email") {
+    if (name === 'email') {
       setEmail(value);
       if (emailError) {
         setEmailError(null);
@@ -43,11 +43,11 @@ function ForgotPassword(props) {
     const { name, value } = e.target;
 
     // Avoid validation until input has a value.
-    if (value === "") {
+    if (value === '') {
       return;
     }
 
-    if (name === "email") {
+    if (name === 'email') {
       setEmail(value);
       validateEmail(value);
       return;
@@ -56,7 +56,7 @@ function ForgotPassword(props) {
 
   const validateEmail = (value = email) => {
     if (!isEmail(value)) {
-      setEmailError("The email field must be a valid email.");
+      setEmailError('The email field must be a valid email.');
       return false;
     }
     return true;
@@ -83,7 +83,7 @@ function ForgotPassword(props) {
       })
       .catch(err => {
         const errors = Object.values(err.errors);
-        errors.join(" ");
+        errors.join(' ');
         const response = {
           error: true,
           message: errors
@@ -157,14 +157,14 @@ function ForgotPassword(props) {
 
 const useStyles = makeStyles(() => ({
   loader: {
-    color: "#fff"
+    color: '#fff'
   }
 }));
 
 ForgotPassword.defaultProps = {
   location: {
     state: {
-      pathname: "/"
+      pathname: '/'
     }
   }
 };

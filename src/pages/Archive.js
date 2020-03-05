@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -11,18 +11,18 @@ import {
   TableHead,
   TableRow,
   CircularProgress
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import MuiAlert from "@material-ui/lab/Alert";
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import MuiAlert from '@material-ui/lab/Alert';
 
-import { apiBase } from "../config";
-import Http from "../Http";
+import { apiBase } from '../config';
+import Http from '../Http';
 
 export default function Archive() {
   // State hooks.
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({});
-  const [apiMore, setApiMore] = useState("");
+  const [apiMore, setApiMore] = useState('');
   const [moreLoaded, setMoreLoaded] = useState(false);
   const [error, setError] = useState(false);
 
@@ -41,7 +41,7 @@ export default function Archive() {
         setError(false);
       })
       .catch(() => {
-        setError("Unable to fetch data.");
+        setError('Unable to fetch data.');
       });
   }, [api]);
 
@@ -58,7 +58,7 @@ export default function Archive() {
         setMoreLoaded(true);
       })
       .catch(() => {
-        setError("Unable to fetch data.");
+        setError('Unable to fetch data.');
       });
   };
 
@@ -161,6 +161,6 @@ export default function Archive() {
 
 const useStyles = makeStyles(() => ({
   loader: {
-    color: "#fff"
+    color: '#fff'
   }
 }));

@@ -1,6 +1,6 @@
-import Http from "../Http";
-import * as action from "../store/actions";
-import { apiBase } from "../config";
+import Http from '../Http';
+import * as action from '../store/actions';
+import { apiBase } from '../config';
 
 export function login(credentials) {
   return dispatch =>
@@ -14,7 +14,7 @@ export function login(credentials) {
           const { status, errors } = err.response.data;
           const data = {
             status,
-            errors: errors ? errors : ["Unknown error."]
+            errors: errors ? errors : ['Unknown error.']
           };
           return reject(data);
         });

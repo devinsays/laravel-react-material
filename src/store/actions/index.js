@@ -1,4 +1,4 @@
-import * as ActionTypes from "../action-types";
+import * as ActionTypes from '../action-types';
 
 export function authLogin(payload) {
   return {
