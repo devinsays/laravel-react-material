@@ -14,18 +14,19 @@ import {
 import MuiAlert from '@material-ui/lab/Alert';
 
 import AuthService from '../services';
-import { validateEmail, validatePassword } from '../utils/validation.js';
+import {
+  emailValidationError,
+  passwordValidationError
+} from '../utils/validation.js';
 
 function LoginForm(props) {
   // State hooks.
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState({
-    value: '',
-    error: false
-  });
-  const [password, setPassword] = useState({
-    value: '',
-    error: false
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [validationErrors, setValidationErrors] = useState({
+    email: false,
+    password: false
   });
   const [response, setResponse] = useState({
     error: false,
@@ -35,13 +36,19 @@ function LoginForm(props) {
   const handleChange = e => {
     const { name, value } = e.target;
 
+    // Remove existing validation error for field.
+    // We'll do a fresh validation check on blur or submission.
+    if (name in validationErrors) {
+      setValidationErrors({ ...validationErrors, [name]: false });
+    }
+
     if (name === 'email') {
-      setEmail({ value, error: false });
+      setEmail({ value });
       return;
     }
 
     if (name === 'password') {
-      setPassword({ value, error: false });
+      setPassword({ value });
       return;
     }
   };
@@ -54,24 +61,37 @@ function LoginForm(props) {
       return;
     }
 
+    let validationError = false;
+
     if (name === 'email') {
-      setEmail({ value, error: validateEmail(value) });
-      return;
+      setEmail(value);
+      validationError = emailValidationError(value);
     }
 
     if (name === 'password') {
-      setPassword({ value, error: validatePassword(value) });
-      return;
+      setPassword(value);
+      validationError = passwordValidationError(value);
+    }
+
+    // Set the validation error if validation failed.
+    if (validationError !== false) {
+      setValidationErrors({ ...validationErrors, [name]: validationError });
     }
   };
 
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (email.error === false && password.error === false) {
+    if (formValidates) {
       setLoading(true);
-      submit({ email: email.value, password: password.value });
+      submit({ email, password });
     }
+  };
+
+  // Checks all the values in the validationErrors object.
+  // Returns true if there are no errors (i.e each value is false).
+  const formValidates = () => {
+    return Object.values(validationErrors).every(value => value === false);
   };
 
   const submit = credentials => {
@@ -84,8 +104,8 @@ function LoginForm(props) {
       };
       setResponse(response);
       setLoading(false);
-      setEmail({ value: '', error: false });
-      setPassword({ value: '', error: false });
+      setEmail('');
+      setPassword('');
     });
   };
 
@@ -123,8 +143,8 @@ function LoginForm(props) {
                   disabled={loading}
                   variant="filled"
                   fullWidth
-                  error={email.error !== false}
-                  helperText={email.error}
+                  error={validationErrors.email !== false}
+                  helperText={validationErrors.email}
                 />
               </div>
               <div>
@@ -136,8 +156,8 @@ function LoginForm(props) {
                   disabled={loading}
                   variant="filled"
                   fullWidth
-                  error={password.error !== false}
-                  helperText={password.error}
+                  error={validationErrors.password !== false}
+                  helperText={validationErrors.password}
                   type="password"
                 />
               </div>
