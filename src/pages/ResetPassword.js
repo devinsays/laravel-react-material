@@ -12,16 +12,19 @@ import {
 import MuiAlert from '@material-ui/lab/Alert';
 
 import AuthService from '../services';
+import { passwordValidationError, formValidates } from '../utils/validation.js';
 import Loader from '../components/Loader';
 
 function ForgotPassword(props) {
   // State hooks.
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState(null);
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [passwordConfirmError, setPasswordConfirmError] = useState(null);
+  const [password, setPassword] = useState();
+  const [passwordConfirm, setPasswordConfirm] = useState();
+  const [validationErrors, setValidationErrors] = useState({
+    password: false,
+    passwordConfirm: false
+  });
   const [response, setResponse] = useState({
     error: false,
     message: ''
@@ -30,31 +33,19 @@ function ForgotPassword(props) {
   const handleChange = e => {
     const { name, value } = e.target;
 
+    // Remove existing validation error for field.
+    // We'll do a fresh validation check on blur or submission.
+    if (name in validationErrors) {
+      setValidationErrors({ ...validationErrors, [name]: false });
+    }
+
     if (name === 'password') {
-      setPassword(value);
-      if (passwordError) {
-        setPasswordError(null);
-      }
+      setPassword({ value });
       return;
     }
 
     if (name === 'passwordConfirm') {
-      setPasswordConfirm(value);
-      if (passwordConfirmError) {
-        setPasswordConfirmError(null);
-      }
-      return;
-    }
-
-    if (name === 'password') {
-      setPassword(value);
-      validatePassword(value);
-      return;
-    }
-
-    if (name === 'passwordConfirm') {
-      setPasswordConfirm(value);
-      validatePasswordConfirm(value);
+      setPasswordConfirm({ value });
       return;
     }
   };
@@ -67,48 +58,32 @@ function ForgotPassword(props) {
       return;
     }
 
+    let validationError = false;
+
     if (name === 'password') {
       setPassword(value);
-      validatePassword(value);
-      return;
+      validationError = passwordValidationError(value);
     }
 
     if (name === 'passwordConfirm') {
       setPasswordConfirm(value);
-      validatePasswordConfirm(value);
-      return;
+      validationError = passwordValidationError(value);
+      // Ensures password and passwordConfirm match.
+      if (validationError === false && password !== value) {
+        validationError = 'Password confirmation does not match password.';
+      }
     }
-  };
 
-  const validatePassword = (value = password) => {
-    if (value.length < 6) {
-      setPasswordError('The password field must be at least 6 characters.');
-      return false;
+    // Set the validation error if validation failed.
+    if (validationError !== false) {
+      setValidationErrors({ ...validationErrors, [name]: validationError });
     }
-    return true;
-  };
-
-  const validatePasswordConfirm = (value = passwordConfirm) => {
-    if (value.length < 6) {
-      setPasswordConfirmError(
-        'The password field must be at least 6 characters.'
-      );
-      return false;
-    }
-    if (password !== value) {
-      setPasswordConfirmError('Password confirmation does not match password.');
-    }
-    return true;
   };
 
   const handleSubmit = e => {
     e.preventDefault();
 
-    // If validation passes, submit.
-    const passwordValidates = validatePassword();
-    const passwordConfirmValidates = validatePasswordConfirm();
-
-    if (passwordValidates && passwordConfirmValidates) {
+    if (formValidates(validationErrors)) {
       setLoading(true);
       submit({
         password,
@@ -185,8 +160,8 @@ function ForgotPassword(props) {
                     disabled={loading}
                     variant="filled"
                     fullWidth
-                    error={passwordError !== null}
-                    helperText={passwordError}
+                    error={validationErrors.email !== false}
+                    helperText={validationErrors.email}
                     type="password"
                   />
                 </div>
@@ -199,8 +174,8 @@ function ForgotPassword(props) {
                     disabled={loading}
                     variant="filled"
                     fullWidth
-                    error={passwordConfirmError !== null}
-                    helperText={passwordConfirmError}
+                    error={validationErrors.password !== false}
+                    helperText={validationErrors.password}
                     type="password"
                   />
                 </div>
