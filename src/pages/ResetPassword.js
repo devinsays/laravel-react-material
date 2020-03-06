@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 import {
   Container,
   TextField,
   Button,
   Typography,
   Box,
-  Paper,
-  CircularProgress
+  Paper
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import AuthService from '../services';
+import Loader from '../components/Loader';
 
 function ForgotPassword(props) {
   // State hooks.
@@ -158,9 +157,6 @@ function ForgotPassword(props) {
       });
   };
 
-  // Styles.
-  const classes = useStyles();
-
   return (
     <Container maxWidth="sm">
       <Typography component="h3" variant="h3" align="center">
@@ -218,13 +214,7 @@ function ForgotPassword(props) {
                   type="submit"
                 >
                   {!loading && <span>Send Password Reset Email</span>}
-                  {loading && (
-                    <CircularProgress
-                      size={24}
-                      thickness={4}
-                      className={classes.loader}
-                    />
-                  )}
+                  {loading && <Loader />}
                 </Button>
               </Box>
             </form>
@@ -234,12 +224,6 @@ function ForgotPassword(props) {
     </Container>
   );
 }
-
-const useStyles = makeStyles(() => ({
-  loader: {
-    color: '#fff'
-  }
-}));
 
 ForgotPassword.defaultProps = {
   location: {

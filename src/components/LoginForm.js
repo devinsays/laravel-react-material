@@ -2,22 +2,16 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import {
-  TextField,
-  Button,
-  Typography,
-  Box,
-  Paper,
-  CircularProgress
-} from '@material-ui/core';
+import { TextField, Button, Typography, Box, Paper } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import AuthService from '../services';
 import {
   emailValidationError,
-  passwordValidationError
+  passwordValidationError,
+  formValidates
 } from '../utils/validation.js';
+import Loader from './Loader';
 
 function LoginForm(props) {
   // State hooks.
@@ -82,16 +76,10 @@ function LoginForm(props) {
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (formValidates) {
+    if (formValidates(validationErrors)) {
       setLoading(true);
       submit({ email, password });
     }
-  };
-
-  // Checks all the values in the validationErrors object.
-  // Returns true if there are no errors (i.e each value is false).
-  const formValidates = () => {
-    return Object.values(validationErrors).every(value => value === false);
   };
 
   const submit = credentials => {
@@ -108,9 +96,6 @@ function LoginForm(props) {
       setPassword('');
     });
   };
-
-  // Styles.
-  const classes = useStyles();
 
   // If user is already authenticated we redirect to entry location.
   const { isAuthenticated } = props;
@@ -171,13 +156,7 @@ function LoginForm(props) {
                 type="submit"
               >
                 {!loading && <span>Sign In</span>}
-                {loading && (
-                  <CircularProgress
-                    size={24}
-                    thickness={4}
-                    className={classes.loader}
-                  />
-                )}
+                {loading && <Loader />}
               </Button>
             </Box>
             <Typography variant="body2" align="center">
@@ -194,12 +173,6 @@ function LoginForm(props) {
     </div>
   );
 }
-
-const useStyles = makeStyles(theme => ({
-  loader: {
-    color: theme.white
-  }
-}));
 
 LoginForm.propTypes = {
   dispatch: PropTypes.func.isRequired,

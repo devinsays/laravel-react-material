@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import {
   Container,
   TextField,
   Button,
   Typography,
   Box,
-  Paper,
-  CircularProgress
+  Paper
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 
@@ -18,8 +16,10 @@ import AuthService from '../services';
 import {
   nameValidationError,
   emailValidationError,
-  passwordValidationError
+  passwordValidationError,
+  formValidates
 } from '../utils/validation.js';
+import Loader from '../components/Loader';
 
 function Register(props) {
   // State hooks.
@@ -113,16 +113,10 @@ function Register(props) {
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (formValidates) {
+    if (formValidates(validationErrors)) {
       setLoading(true);
       submit({ name, email, password, password_confirmation: passwordConfirm });
     }
-  };
-
-  // Checks all the values in the validationErrors object.
-  // Returns true if there are no errors (i.e each value is false).
-  const formValidates = () => {
-    return Object.values(validationErrors).every(value => value === false);
   };
 
   const submit = credentials => {
@@ -143,9 +137,6 @@ function Register(props) {
         setLoading(false);
       });
   };
-
-  // Styles.
-  const classes = useStyles();
 
   // If user is already authenticated we redirect to entry location.
   const { isAuthenticated } = props;
@@ -237,13 +228,7 @@ function Register(props) {
                   type="submit"
                 >
                   {!loading && <span>Register</span>}
-                  {loading && (
-                    <CircularProgress
-                      size={24}
-                      thickness={4}
-                      className={classes.loader}
-                    />
-                  )}
+                  {loading && <Loader />}
                 </Button>
               </Box>
               <Typography variant="body2" align="center">
@@ -256,12 +241,6 @@ function Register(props) {
     </Container>
   );
 }
-
-const useStyles = makeStyles(theme => ({
-  loader: {
-    color: theme.white
-  }
-}));
 
 Register.propTypes = {
   dispatch: PropTypes.func.isRequired,

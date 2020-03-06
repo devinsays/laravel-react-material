@@ -1,27 +1,28 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import isEmail from 'validator/es/lib/isEmail';
-import { makeStyles } from '@material-ui/core/styles';
 import {
   Container,
   TextField,
   Button,
   Typography,
   Box,
-  Paper,
-  CircularProgress
+  Paper
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import AuthService from '../services';
+import { emailValidationError, formValidates } from '../utils/validation.js';
+import Loader from '../components/Loader';
 
 function ForgotPassword(props) {
   // State hooks.
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState(null);
+  const [email, setEmail] = useState();
+  const [validationErrors, setValidationErrors] = useState({
+    email: false
+  });
   const [response, setResponse] = useState({
     error: false,
     message: ''
@@ -30,12 +31,14 @@ function ForgotPassword(props) {
   const handleChange = e => {
     const { name, value } = e.target;
 
+    // Remove existing validation error for field.
+    // We'll do a fresh validation check on blur or submission.
+    if (name in validationErrors) {
+      setValidationErrors({ ...validationErrors, [name]: false });
+    }
+
     if (name === 'email') {
-      setEmail(value);
-      if (emailError) {
-        setEmailError(null);
-      }
-      return;
+      setEmail({ value });
     }
   };
 
@@ -47,28 +50,23 @@ function ForgotPassword(props) {
       return;
     }
 
+    let validationError = false;
+
     if (name === 'email') {
       setEmail(value);
-      validateEmail(value);
-      return;
+      validationError = emailValidationError(value);
     }
-  };
 
-  const validateEmail = (value = email) => {
-    if (!isEmail(value)) {
-      setEmailError('The email field must be a valid email.');
-      return false;
+    // Set the validation error if validation failed.
+    if (validationError !== false) {
+      setValidationErrors({ ...validationErrors, [name]: validationError });
     }
-    return true;
   };
 
   const handleSubmit = e => {
     e.preventDefault();
 
-    // If validation passes, submit.
-    const emailValidates = validateEmail();
-
-    if (emailValidates) {
+    if (formValidates(validationErrors)) {
       setLoading(true);
       submit({ email });
     }
@@ -92,9 +90,6 @@ function ForgotPassword(props) {
         setLoading(false);
       });
   };
-
-  // Styles.
-  const classes = useStyles();
 
   return (
     <Container maxWidth="sm">
@@ -124,8 +119,8 @@ function ForgotPassword(props) {
                     disabled={loading}
                     variant="filled"
                     fullWidth
-                    error={emailError !== null}
-                    helperText={emailError}
+                    error={validationErrors.email !== false}
+                    helperText={validationErrors.email}
                   />
                 </div>
               </Box>
@@ -138,13 +133,7 @@ function ForgotPassword(props) {
                   type="submit"
                 >
                   {!loading && <span>Send Password Reset Email</span>}
-                  {loading && (
-                    <CircularProgress
-                      size={24}
-                      thickness={4}
-                      className={classes.loader}
-                    />
-                  )}
+                  {loading && <Loader />}
                 </Button>
               </Box>
             </form>
@@ -154,12 +143,6 @@ function ForgotPassword(props) {
     </Container>
   );
 }
-
-const useStyles = makeStyles(() => ({
-  loader: {
-    color: '#fff'
-  }
-}));
 
 ForgotPassword.defaultProps = {
   location: {
