@@ -154,6 +154,7 @@ function LoginForm(props) {
                 disabled={loading}
                 fullWidth
                 type="submit"
+                disableElevation
               >
                 {!loading && <span>Sign In</span>}
                 {loading && <Loader />}

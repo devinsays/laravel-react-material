@@ -40,7 +40,7 @@ function Header(props) {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" elevation={0}>
       <Toolbar>
         <Typography component="h1" variant="h6" className={classes.title}>
           <Link to="/" className={classes.titleLink}>
@@ -88,7 +88,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   titleLink: {
-    color: theme.text,
+    color: theme.white,
     textDecoration: 'none'
   }
 }));
