@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import isEmail from 'validator/es/lib/isEmail';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Container,
@@ -16,19 +15,26 @@ import {
 import MuiAlert from '@material-ui/lab/Alert';
 
 import AuthService from '../services';
+import {
+  nameValidationError,
+  emailValidationError,
+  passwordValidationError
+} from '../utils/validation.js';
 
 function Register(props) {
   // State hooks.
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [name, setName] = useState('');
-  const [nameError, setNameError] = useState(null);
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState(null);
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
   const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState(null);
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [passwordConfirmError, setPasswordConfirmError] = useState(null);
+  const [validationErrors, setValidationErrors] = useState({
+    name: false,
+    email: false,
+    password: false,
+    passwordConfirm: false
+  });
   const [response, setResponse] = useState({
     error: false,
     message: ''
@@ -37,35 +43,29 @@ function Register(props) {
   const handleChange = e => {
     const { name, value } = e.target;
 
+    // Remove existing validation error for field.
+    // We'll do a fresh validation check on blur or submission.
+    if (name in validationErrors) {
+      setValidationErrors({ ...validationErrors, [name]: false });
+    }
+
     if (name === 'name') {
       setName(value);
-      if (nameError) {
-        setNameError(null);
-      }
       return;
     }
 
     if (name === 'email') {
       setEmail(value);
-      if (emailError) {
-        setEmailError(null);
-      }
       return;
     }
 
     if (name === 'password') {
       setPassword(value);
-      if (passwordError) {
-        setPasswordError(null);
-      }
       return;
     }
 
     if (name === 'passwordConfirm') {
       setPasswordConfirm(value);
-      if (passwordConfirmError) {
-        setPasswordConfirmError(null);
-      }
       return;
     }
   };
@@ -78,86 +78,51 @@ function Register(props) {
       return;
     }
 
+    let validationError = false;
+
     if (name === 'name') {
       setName(value);
-      validateName(value);
-      return;
+      validationError = nameValidationError(value);
     }
 
     if (name === 'email') {
       setEmail(value);
-      validateEmail(value);
-      return;
+      validationError = emailValidationError(value);
     }
 
     if (name === 'password') {
       setPassword(value);
-      validatePassword(value);
-      return;
+      validationError = passwordValidationError(value);
     }
 
     if (name === 'passwordConfirm') {
       setPasswordConfirm(value);
-      validatePasswordConfirm(value);
-      return;
+      validationError = passwordValidationError(value);
+      // Ensures password and passwordConfirm match.
+      if (validationError === false && password !== value) {
+        validationError = 'Password confirmation does not match password.';
+      }
     }
-  };
 
-  const validateName = (value = name) => {
-    if (value.length < 3) {
-      setNameError('Name must be at least 3 characters.');
-      return false;
+    // Set the validation error if validation failed.
+    if (validationError !== false) {
+      setValidationErrors({ ...validationErrors, [name]: validationError });
     }
-    return true;
-  };
-
-  const validateEmail = (value = email) => {
-    if (!isEmail(value)) {
-      setEmailError('The email field must be a valid email.');
-      return false;
-    }
-    return true;
-  };
-
-  const validatePassword = (value = password) => {
-    if (value.length < 6) {
-      setPasswordError('The password field must be at least 6 characters.');
-      return false;
-    }
-    return true;
-  };
-
-  const validatePasswordConfirm = (value = passwordConfirm) => {
-    if (value.length < 6) {
-      setPasswordConfirmError(
-        'The password field must be at least 6 characters.'
-      );
-      return false;
-    }
-    if (password !== value) {
-      setPasswordConfirmError('Password confirmation does not match password.');
-    }
-    return true;
   };
 
   const handleSubmit = e => {
     e.preventDefault();
 
-    // If validation passes, submit.
-    const nameValidates = validateName();
-    const emailValidates = validateEmail();
-    const passwordValidates = validatePassword();
-    const passwordConfirmValidates = validatePasswordConfirm();
-
-    if (
-      nameValidates &&
-      emailValidates &&
-      passwordValidates &&
-      passwordConfirmValidates
-    ) {
+    if (formValidates) {
       setLoading(true);
       submit({ name, email, password, password_confirmation: passwordConfirm });
     }
+  };
+
+  // Checks all the values in the validationErrors object.
+  // Returns true if there are no errors (i.e each value is false).
+  const formValidates = () => {
+    return Object.values(validationErrors).every(value => value === false);
   };
 
   const submit = credentials => {
@@ -217,8 +182,8 @@ function Register(props) {
                     disabled={loading}
                     variant="filled"
                     fullWidth
-                    error={nameError !== null}
-                    helperText={nameError}
+                    error={validationErrors.name !== false}
+                    helperText={validationErrors.name}
                   />
                 </div>
                 <div>
@@ -230,8 +195,8 @@ function Register(props) {
                     disabled={loading}
                     variant="filled"
                     fullWidth
-                    error={emailError !== null}
-                    helperText={emailError}
+                    error={validationErrors.email !== false}
+                    helperText={validationErrors.email}
                   />
                 </div>
                 <div>
@@ -243,8 +208,8 @@ function Register(props) {
                     disabled={loading}
                     variant="filled"
                     fullWidth
-                    error={passwordError !== null}
-                    helperText={passwordError}
+                    error={validationErrors.password !== false}
+                    helperText={validationErrors.password}
                     type="password"
                   />
                 </div>
@@ -257,8 +222,8 @@ function Register(props) {
                     disabled={loading}
                     variant="filled"
                     fullWidth
-                    error={passwordConfirmError !== null}
-                    helperText={passwordConfirmError}
+                    error={validationErrors.passwordConfirm !== false}
+                    helperText={validationErrors.passwordConfirm}
                     type="password"
                   />
                 </div>
@@ -292,9 +257,9 @@ function Register(props) {
   );
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   loader: {
-    color: '#fff'
+    color: theme.white
   }
 }));
 
