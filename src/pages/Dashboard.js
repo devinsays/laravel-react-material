@@ -21,7 +21,7 @@ import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/HighlightOff';
 
 import { apiBase } from '../config';
-import Http from '../Http';
+import http from '../http';
 
 export default function Dashboard() {
   // State hooks.
@@ -34,7 +34,8 @@ export default function Dashboard() {
 
   // Effect runs once on mount.
   useEffect(() => {
-    Http.get(`${api}?status=open`)
+    http
+      .get(`${api}?status=open`)
       .then(response => {
         const { data } = response.data;
         setData(data);
@@ -56,7 +57,8 @@ export default function Dashboard() {
   };
 
   const addTodo = todo => {
-    Http.post(api, { value: todo })
+    http
+      .post(api, { value: todo })
       .then(({ data: response }) => {
         const newItem = {
           id: response.id,
@@ -74,7 +76,8 @@ export default function Dashboard() {
   const closeTodo = id => {
     const todos = data;
 
-    Http.patch(`${api}/${id}`, { status: 'closed' })
+    http
+      .patch(`${api}/${id}`, { status: 'closed' })
       .then(() => {
         const updatedTodos = todos.filter(todo => todo.id !== parseInt(id, 10));
         setData(updatedTodos);

@@ -1,5 +1,5 @@
 import * as ActionTypes from '../action-types';
-import Http from '../../Http';
+import http from '../../http';
 
 const defaultUser = {
   id: null,
@@ -16,7 +16,7 @@ const authLogin = (state, payload) => {
   const { access_token: AccessToken, user } = payload;
   localStorage.setItem('access_token', AccessToken);
   localStorage.setItem('user', JSON.stringify(user));
-  Http.defaults.headers.common.Authorization = `Bearer ${AccessToken}`;
+  http.defaults.headers.common.Authorization = `Bearer ${AccessToken}`;
   const stateObj = Object.assign({}, state, {
     isAuthenticated: true,
     user
@@ -30,7 +30,7 @@ const checkAuth = state => {
     user: JSON.parse(localStorage.getItem('user'))
   });
   if (state.isAuthenticated) {
-    Http.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
+    http.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
       'access_token'
     )}`;
   }

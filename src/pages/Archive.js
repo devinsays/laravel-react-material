@@ -18,7 +18,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Delete from '@material-ui/icons/Delete';
 
 import { apiBase } from '../config';
-import Http from '../Http';
+import http from '../http';
 
 export default function Archive() {
   // State hooks.
@@ -33,7 +33,8 @@ export default function Archive() {
 
   // Effect runs once on mount.
   useEffect(() => {
-    Http.get(api)
+    http
+      .get(api)
       .then(response => {
         const { data } = response.data;
         const apiMore = response.data.links.next;
@@ -49,7 +50,8 @@ export default function Archive() {
 
   const loadMore = () => {
     setLoading(true);
-    Http.get(apiMore)
+    http
+      .get(apiMore)
       .then(response => {
         const apiMore = response.data.links.next;
         const dataMore = data.concat(response.data.data);
@@ -67,7 +69,8 @@ export default function Archive() {
   const deleteTodo = id => {
     const todos = data;
 
-    Http.delete(`${api}/${id}`)
+    http
+      .delete(`${api}/${id}`)
       .then(response => {
         if (response.status === 204) {
           const index = todos.findIndex(

@@ -29,9 +29,9 @@ function Header(props) {
     setAnchorEl(null);
   };
 
-  const handleArchive = () => {
+  const navigateLogIn = () => {
     setAnchorEl(null);
-    history.push('/archive');
+    history.push('/login');
   };
 
   const handleLogout = () => {
@@ -47,36 +47,40 @@ function Header(props) {
             Laravel Material
           </Link>
         </Typography>
-        {props.isAuthenticated && (
-          <div>
-            <IconButton
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              open={open}
-              onClose={handleClose}
-            >
+
+        <div>
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+            open={open}
+            onClose={handleClose}
+          >
+            {!props.isAuthenticated && (
+              <MenuItem onClick={navigateLogIn}>Log In</MenuItem>
+            )}
+            {props.isAuthenticated && (
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
-            </Menu>
-          </div>
-        )}
+            )}
+          </Menu>
+        </div>
       </Toolbar>
     </AppBar>
   );
