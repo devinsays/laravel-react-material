@@ -9,8 +9,7 @@ import isEqual from 'lodash/isEqual';
 import AuthService from '../services';
 import {
   emailValidationError,
-  passwordValidationError,
-  formValidates
+  passwordValidationError
 } from '../utils/validation.js';
 import Loader from './Loader';
 

@@ -11,9 +11,16 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TableRow
+  TableRow,
+  IconButton,
+  FormControl,
+  InputLabel,
+  FilledInput,
+  Input,
+  InputAdornment
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import CloseIcon from '@material-ui/icons/HighlightOff';
 
 import { apiBase } from '../config';
 import Http from '../Http';
@@ -66,15 +73,12 @@ export default function Dashboard() {
       });
   };
 
-  const closeTodo = e => {
-    const { key } = e.target.dataset;
+  const closeTodo = id => {
     const todos = data;
 
-    Http.patch(`${api}/${key}`, { status: 'closed' })
+    Http.patch(`${api}/${id}`, { status: 'closed' })
       .then(() => {
-        const updatedTodos = todos.filter(
-          todo => todo.id !== parseInt(key, 10)
-        );
+        const updatedTodos = todos.filter(todo => todo.id !== parseInt(id, 10));
         setData(updatedTodos);
       })
       .catch(() => {
@@ -89,29 +93,24 @@ export default function Dashboard() {
           Add a Task
         </Typography>
         <form method="post" onSubmit={handleSubmit}>
-          <Grid
-            container
-            direction="row"
-            justify="flex-start"
-            alignItems="stretch"
-            spacing={2}
-          >
-            <Grid item>
-              <TextField
-                name="todo"
-                label="New Task"
-                onChange={handleChange}
-                value={todo}
-                variant="filled"
-              />
-            </Grid>
-            <Grid item>
-              <Button type="submit" variant="contained" color="primary">
-                Add
-                <AddIcon>+</AddIcon>
-              </Button>
-            </Grid>
-          </Grid>
+          <FormControl fullWidth variant="filled">
+            <InputLabel htmlFor="add-todo">New Task</InputLabel>
+            <FilledInput
+              id="add-todo"
+              onChange={handleChange}
+              value={todo}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    type="submit"
+                  >
+                    <AddIcon />
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
         </form>
       </Box>
 
@@ -139,14 +138,12 @@ export default function Dashboard() {
                   {row.value}
                 </TableCell>
                 <TableCell align="right">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={closeTodo}
-                    data-key={row.id}
+                  <IconButton
+                    aria-label="Close"
+                    onClick={() => closeTodo(row.id)}
                   >
-                    Close
-                  </button>
+                    <CloseIcon />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}
