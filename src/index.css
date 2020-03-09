@@ -35,3 +35,7 @@ svg {
   max-width: 100%;
   height: auto;
 }
+
+p:last-of-type {
+  margin-bottom: 0;
+}

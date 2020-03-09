@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { TextField, Button, Typography, Box, Paper } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
+import isEqual from 'lodash/isEqual';
 
 import AuthService from '../services';
 import {
@@ -37,12 +38,12 @@ function LoginForm(props) {
     }
 
     if (name === 'email') {
-      setEmail({ value });
+      setEmail(value);
       return;
     }
 
     if (name === 'password') {
-      setPassword({ value });
+      setPassword(value);
       return;
     }
   };
@@ -76,13 +77,26 @@ function LoginForm(props) {
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (formValidates(validationErrors)) {
+    // Runs final form validation.
+    const errors = {
+      ...validationErrors,
+      email: emailValidationError(email),
+      password: passwordValidationError(password)
+    };
+
+    // Compares the objects to see if validation messages have changed.
+    const validates = isEqual(validationErrors, errors);
+
+    if (validates) {
       setLoading(true);
       submit({ email, password });
+    } else {
+      setValidationErrors({ ...errors });
     }
   };
 
   const submit = credentials => {
+    console.log(credentials);
     props.dispatch(AuthService.login(credentials)).catch(err => {
       const errors = Object.values(err.errors);
       errors.join(' ');
