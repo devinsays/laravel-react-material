@@ -147,8 +147,13 @@ function Register(props) {
 
   return (
     <Container maxWidth="sm">
+      <Box mb={3}>
+        <Typography component="h3" variant="h3" align="center">
+          Register for the App
+        </Typography>
+      </Box>
       <Paper elevation={3}>
-        <Box p={4} pb={3}>
+        <Box pt={2} pr={4} pb={4} pl={4}>
           {success && (
             <MuiAlert severity="success">
               Registration successful.

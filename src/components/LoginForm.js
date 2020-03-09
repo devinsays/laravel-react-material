@@ -119,9 +119,11 @@ function LoginForm(props) {
 
   return (
     <div>
-      <Typography component="h3" variant="h3" align="center">
-        Log in to the App
-      </Typography>
+      <Box mb={3}>
+        <Typography component="h3" variant="h3" align="center">
+          Log in to the App
+        </Typography>
+      </Box>
 
       <Paper elevation={3}>
         <Box p={4} pb={3}>
