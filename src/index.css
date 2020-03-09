@@ -36,6 +36,17 @@ svg {
   height: auto;
 }
 
+a {
+  text-decoration: none;
+  color: #4285f4;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #0059c1;
+}
+
 p:last-of-type {
   margin-bottom: 0;
 }

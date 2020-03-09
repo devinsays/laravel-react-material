@@ -73,7 +73,6 @@ function Header(props) {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleArchive}>Archive</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </div>
@@ -89,7 +88,11 @@ const useStyles = makeStyles(theme => ({
   },
   titleLink: {
     color: theme.white,
-    textDecoration: 'none'
+    textDecoration: 'none',
+    '&:hover': {
+      color: theme.white,
+      textDecoration: 'none'
+    }
   }
 }));
 

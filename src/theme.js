@@ -31,6 +31,13 @@ const theme = createMuiTheme({
     body1: {
       marginBottom: '1rem'
     }
+  },
+  overrides: {
+    MuiMenuItem: {
+      root: {
+        marginBottom: '0'
+      }
+    }
   }
 });
 

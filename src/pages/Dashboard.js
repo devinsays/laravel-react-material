@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Box,
-  TextField,
-  Button,
   Typography,
-  Grid,
   Paper,
   Container,
   Table,
@@ -16,8 +14,8 @@ import {
   FormControl,
   InputLabel,
   FilledInput,
-  Input,
-  InputAdornment
+  InputAdornment,
+  Grid
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/HighlightOff';
@@ -92,6 +90,7 @@ export default function Dashboard() {
         <Typography component="h2" variant="h3">
           Add a Task
         </Typography>
+
         <form method="post" onSubmit={handleSubmit}>
           <FormControl fullWidth variant="filled">
             <InputLabel htmlFor="add-todo">New Task</InputLabel>
@@ -101,10 +100,7 @@ export default function Dashboard() {
               value={todo}
               endAdornment={
                 <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    type="submit"
-                  >
+                  <IconButton aria-label="add task" type="submit">
                     <AddIcon />
                   </IconButton>
                 </InputAdornment>
@@ -120,9 +116,23 @@ export default function Dashboard() {
         </div>
       )}
 
-      <Typography component="h2" variant="h3">
-        Open Tasks
-      </Typography>
+      <Box mb={2}>
+        <Grid container justify="space-between" alignItems="center">
+          <Grid item>
+            <Typography
+              component="h2"
+              variant="h3"
+              style={{ marginBottom: '0' }}
+            >
+              Open Tasks
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Link to="/archive">View Archive</Link>
+          </Grid>
+        </Grid>
+      </Box>
+
       <Paper>
         <Table>
           <TableHead>

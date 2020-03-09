@@ -10,10 +10,12 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  CircularProgress
+  CircularProgress,
+  IconButton
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
+import Delete from '@material-ui/icons/Delete';
 
 import { apiBase } from '../config';
 import Http from '../Http';
@@ -62,15 +64,14 @@ export default function Archive() {
       });
   };
 
-  const deleteTodo = e => {
-    const { key } = e.target.dataset;
+  const deleteTodo = id => {
     const todos = data;
 
-    Http.delete(`${api}/${key}`)
+    Http.delete(`${api}/${id}`)
       .then(response => {
         if (response.status === 204) {
           const index = todos.findIndex(
-            todo => parseInt(todo.id, 10) === parseInt(key, 10)
+            todo => parseInt(todo.id, 10) === parseInt(id, 10)
           );
           const update = [...todos.slice(0, index), ...todos.slice(index + 1)];
           setData(update);
@@ -114,14 +115,12 @@ export default function Archive() {
                   <TableCell>{todo.value}</TableCell>
                   <TableCell>{todo.status}</TableCell>
                   <TableCell>
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      onClick={deleteTodo}
-                      data-key={todo.id}
+                    <IconButton
+                      aria-label="Close"
+                      onClick={() => deleteTodo(todo.id)}
                     >
-                      Delete
-                    </button>
+                      <Delete />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}

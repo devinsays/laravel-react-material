@@ -1,11 +1,12 @@
-import Http from '../Http';
+import http from '../http';
 import * as action from '../store/actions';
 import { apiBase } from '../config';
 
 export function login(credentials) {
   return dispatch =>
     new Promise((resolve, reject) => {
-      Http.post(`${apiBase}/api/v1/auth/login`, credentials)
+      http
+        .post(`${apiBase}/api/v1/auth/login`, credentials)
         .then(res => {
           dispatch(action.authLogin(res.data));
           return resolve();
@@ -24,7 +25,8 @@ export function login(credentials) {
 export function register(credentials) {
   return dispatch =>
     new Promise((resolve, reject) => {
-      Http.post(`${apiBase}/api/v1/auth/register`, credentials)
+      http
+        .post(`${apiBase}/api/v1/auth/register`, credentials)
         .then(res => resolve(res.data))
         .catch(err => {
           const { status, errors } = err.response.data;
@@ -40,7 +42,8 @@ export function register(credentials) {
 export function resetPassword(credentials) {
   return dispatch =>
     new Promise((resolve, reject) => {
-      Http.post(`${apiBase}/api/v1/auth/forgot-password`, credentials)
+      http
+        .post(`${apiBase}/api/v1/auth/forgot-password`, credentials)
         .then(res => resolve(res.data))
         .catch(err => {
           const { status, errors } = err.response.data;
@@ -56,7 +59,8 @@ export function resetPassword(credentials) {
 export function updatePassword(credentials) {
   return dispatch =>
     new Promise((resolve, reject) => {
-      Http.post(`${apiBase}/api/v1/auth/password-reset`, credentials)
+      http
+        .post(`${apiBase}/api/v1/auth/password-reset`, credentials)
         .then(res => {
           const { status } = res.data.status;
           if (status === 202) {
