@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -133,70 +134,75 @@ function ForgotPassword(props) {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Typography component="h3" variant="h3" align="center">
-        Reset Your Password
-      </Typography>
-      <Paper elevation={3}>
-        <Box p={4} pb={3}>
-          {success && (
-            <MuiAlert severity="success">
-              Your password has been reset!
-            </MuiAlert>
-          )}
-          {!success && (
-            <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-              {response.error && (
-                <MuiAlert severity="error">{response.message}</MuiAlert>
-              )}
-              <Box mb={3}></Box>
-              <Box mb={2}>
-                <div>
-                  <TextField
-                    name="password"
-                    label="Password"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+    <>
+      <Helmet>
+        <title>Reset Password | Laravel Material</title>
+      </Helmet>
+      <Container maxWidth="sm">
+        <Typography component="h3" variant="h3" align="center">
+          Reset Your Password
+        </Typography>
+        <Paper elevation={3}>
+          <Box p={4} pb={3}>
+            {success && (
+              <MuiAlert severity="success">
+                Your password has been reset!
+              </MuiAlert>
+            )}
+            {!success && (
+              <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+                {response.error && (
+                  <MuiAlert severity="error">{response.message}</MuiAlert>
+                )}
+                <Box mb={3}></Box>
+                <Box mb={2}>
+                  <div>
+                    <TextField
+                      name="password"
+                      label="Password"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={loading}
+                      variant="filled"
+                      fullWidth
+                      error={validationErrors.email !== false}
+                      helperText={validationErrors.email}
+                      type="password"
+                    />
+                  </div>
+                  <div>
+                    <TextField
+                      name="passwordConfirm"
+                      label="Confirm Password"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={loading}
+                      variant="filled"
+                      fullWidth
+                      error={validationErrors.password !== false}
+                      helperText={validationErrors.password}
+                      type="password"
+                    />
+                  </div>
+                </Box>
+                <Box mb={2}>
+                  <Button
+                    variant="contained"
+                    color="primary"
                     disabled={loading}
-                    variant="filled"
                     fullWidth
-                    error={validationErrors.email !== false}
-                    helperText={validationErrors.email}
-                    type="password"
-                  />
-                </div>
-                <div>
-                  <TextField
-                    name="passwordConfirm"
-                    label="Confirm Password"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    disabled={loading}
-                    variant="filled"
-                    fullWidth
-                    error={validationErrors.password !== false}
-                    helperText={validationErrors.password}
-                    type="password"
-                  />
-                </div>
-              </Box>
-              <Box mb={2}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={loading}
-                  fullWidth
-                  type="submit"
-                >
-                  {!loading && <span>Send Password Reset Email</span>}
-                  {loading && <Loader />}
-                </Button>
-              </Box>
-            </form>
-          )}
-        </Box>
-      </Paper>
-    </Container>
+                    type="submit"
+                  >
+                    {!loading && <span>Send Password Reset Email</span>}
+                    {loading && <Loader />}
+                  </Button>
+                </Box>
+              </form>
+            )}
+          </Box>
+        </Paper>
+      </Container>
+    </>
   );
 }
 

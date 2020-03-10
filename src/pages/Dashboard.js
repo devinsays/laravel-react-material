@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import {
   Box,
@@ -88,81 +89,86 @@ export default function Dashboard() {
   };
 
   return (
-    <Container maxWidth="md">
-      <Box mb={6}>
-        <Typography component="h2" variant="h3">
-          Add a Task
-        </Typography>
+    <>
+      <Helmet>
+        <title>Dashboard | Laravel Material</title>
+      </Helmet>
+      <Container maxWidth="md">
+        <Box mb={6}>
+          <Typography component="h2" variant="h3">
+            Add a Task
+          </Typography>
 
-        <form method="post" onSubmit={handleSubmit}>
-          <FormControl fullWidth variant="filled">
-            <InputLabel htmlFor="add-todo">New Task</InputLabel>
-            <FilledInput
-              id="add-todo"
-              onChange={handleChange}
-              value={todo}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton aria-label="add task" type="submit">
-                    <AddIcon />
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
-        </form>
-      </Box>
+          <form method="post" onSubmit={handleSubmit}>
+            <FormControl fullWidth variant="filled">
+              <InputLabel htmlFor="add-todo">New Task</InputLabel>
+              <FilledInput
+                id="add-todo"
+                onChange={handleChange}
+                value={todo}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton aria-label="add task" type="submit">
+                      <AddIcon />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+          </form>
+        </Box>
 
-      {error && (
-        <div className="alert alert-warning" role="alert">
-          {error}
-        </div>
-      )}
+        {error && (
+          <div className="alert alert-warning" role="alert">
+            {error}
+          </div>
+        )}
 
-      <Box mb={2}>
-        <Grid container justify="space-between" alignItems="center">
-          <Grid item>
-            <Typography
-              component="h2"
-              variant="h3"
-              style={{ marginBottom: '0' }}
-            >
-              Open Tasks
-            </Typography>
+        <Box mb={2}>
+          <Grid container justify="space-between" alignItems="center">
+            <Grid item>
+              <Typography
+                component="h2"
+                variant="h3"
+                style={{ marginBottom: '0' }}
+              >
+                Open Tasks
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Link to="/archive">View Archive</Link>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Link to="/archive">View Archive</Link>
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
 
-      <Paper>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>To Do</TableCell>
-              <TableCell align="right">Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map(row => (
-              <TableRow key={row.id}>
-                <TableCell component="th" scope="row">
-                  {row.value}
-                </TableCell>
-                <TableCell align="right">
-                  <IconButton
-                    aria-label="Close"
-                    onClick={() => closeTodo(row.id)}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </TableCell>
+        <Paper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>To Do</TableCell>
+                <TableCell align="right">Action</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-    </Container>
+            </TableHead>
+            <TableBody>
+              {data.map(row => (
+                <TableRow key={row.id}>
+                  <TableCell component="th" scope="row">
+                    {row.value}
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      aria-label="Close"
+                      onClick={() => closeTodo(row.id)}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Container>
+    </>
   );
 }

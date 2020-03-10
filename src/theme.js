@@ -37,6 +37,11 @@ const theme = createMuiTheme({
       root: {
         marginBottom: '0'
       }
+    },
+    MuiInputBase: {
+      root: {
+        marginBottom: '0'
+      }
     }
   }
 });

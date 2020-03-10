@@ -12,16 +12,23 @@ export default function Home() {
         </Typography>
         <Box py={2} pr={4}>
           <Typography>
-            This is a headless frontend built with{' '}
+            This headless frontend was built with{' '}
             <a href="https://material-ui.com/">Material UI</a> and scaffolded
             with{' '}
             <a href="https://reactjs.org/docs/create-a-new-react-app.html">
               Create React App
             </a>
-            . The project authenticates and stores data using an API built in
-            Laravel.
+            . The project authenticates and stores data using{' '}
+            <a href="https://github.com/devinsays/laravel-react-bootstrap">
+              an API built in Laravel
+            </a>
+            .
           </Typography>
-          <Typography>Source code and documentation on GitHub.</Typography>
+          <Typography>
+            <a href="https://github.com/devinsays/laravel-react-material">
+              Source code and documentation on GitHub.
+            </a>
+          </Typography>
         </Box>
       </Grid>
       <Grid item xs={12} sm={6}>

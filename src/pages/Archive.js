@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import {
   Box,
   Button,
@@ -10,15 +11,14 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  CircularProgress,
   IconButton
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
 import Delete from '@material-ui/icons/Delete';
 
 import { apiBase } from '../config';
 import http from '../http';
+import Loader from '../components/Loader';
 
 export default function Archive() {
   // State hooks.
@@ -87,82 +87,73 @@ export default function Archive() {
 
   const todos = Array.from(data);
 
-  // Styles.
-  const classes = useStyles();
-
   return (
-    <Container maxWidth="md">
-      {error && <MuiAlert severity="error">{error}</MuiAlert>}
+    <>
+      <Helmet>
+        <title>Archive | Laravel Material</title>
+      </Helmet>
+      <Container maxWidth="md">
+        {error && <MuiAlert severity="error">{error}</MuiAlert>}
 
-      <Typography component="h2" variant="h3">
-        Archive
-      </Typography>
-
-      <Box mb={4}>
-        <Paper>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Time</TableCell>
-                <TableCell>To Do</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {todos.map(todo => (
-                <TableRow key={todo.id}>
-                  <TableCell component="th" scope="row">
-                    {todo.created_at}
-                  </TableCell>
-                  <TableCell>{todo.value}</TableCell>
-                  <TableCell>{todo.status}</TableCell>
-                  <TableCell>
-                    <IconButton
-                      aria-label="Close"
-                      onClick={() => deleteTodo(todo.id)}
-                    >
-                      <Delete />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper>
-      </Box>
-
-      {apiMore && (
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={loading}
-          fullWidth
-          type="submit"
-          onClick={loadMore}
-        >
-          {!loading && <span>Load More</span>}
-          {loading && (
-            <CircularProgress
-              size={24}
-              thickness={4}
-              className={classes.loader}
-            />
-          )}
-        </Button>
-      )}
-
-      {apiMore === null && moreLoaded === true && (
-        <Typography variant="body2" align="center">
-          Everything loaded.
+        <Typography component="h2" variant="h3">
+          Archive
         </Typography>
-      )}
-    </Container>
+
+        <Box mb={4}>
+          <Paper>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Time</TableCell>
+                  <TableCell>To Do</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {todos.map(todo => (
+                  <TableRow key={todo.id}>
+                    <TableCell component="th" scope="row">
+                      {todo.created_at}
+                    </TableCell>
+                    <TableCell>{todo.value}</TableCell>
+                    <TableCell>{todo.status}</TableCell>
+                    <TableCell>
+                      <IconButton
+                        aria-label="Close"
+                        onClick={() => deleteTodo(todo.id)}
+                      >
+                        <Delete />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        </Box>
+
+        {apiMore && (
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={loading}
+            fullWidth
+            type="submit"
+            onClick={loadMore}
+          >
+            {!loading && <span>Load More</span>}
+            {loading && <Loader />}
+            )}
+          </Button>
+        )}
+
+        {apiMore === null && moreLoaded === true && (
+          <Typography variant="body2" align="center">
+            Everything loaded.
+          </Typography>
+        )}
+      </Container>
+    </>
   );
 }
-
-const useStyles = makeStyles(() => ({
-  loader: {
-    color: '#fff'
-  }
-}));

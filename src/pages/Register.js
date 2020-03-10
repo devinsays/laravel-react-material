@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
@@ -146,104 +147,109 @@ function Register(props) {
   }
 
   return (
-    <Container maxWidth="sm">
-      <Box mb={3}>
-        <Typography component="h3" variant="h3" align="center">
-          Register for the App
-        </Typography>
-      </Box>
-      <Paper elevation={3}>
-        <Box pt={2} pr={4} pb={4} pl={4}>
-          {success && (
-            <MuiAlert severity="success">
-              Registration successful.
-              <Link to="/" href="/">
-                Please log in with your new email and password.
-              </Link>
-            </MuiAlert>
-          )}
-          {!success && (
-            <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-              {response.error && (
-                <MuiAlert severity="error">{response.message}</MuiAlert>
-              )}
-              <Box mb={3}></Box>
-              <Box mb={2}>
-                <div>
-                  <TextField
-                    name="name"
-                    label="Full Name"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    disabled={loading}
-                    variant="filled"
-                    fullWidth
-                    error={validationErrors.name !== false}
-                    helperText={validationErrors.name}
-                  />
-                </div>
-                <div>
-                  <TextField
-                    name="email"
-                    label="Email Address"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    disabled={loading}
-                    variant="filled"
-                    fullWidth
-                    error={validationErrors.email !== false}
-                    helperText={validationErrors.email}
-                  />
-                </div>
-                <div>
-                  <TextField
-                    name="password"
-                    label="Password"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    disabled={loading}
-                    variant="filled"
-                    fullWidth
-                    error={validationErrors.password !== false}
-                    helperText={validationErrors.password}
-                    type="password"
-                  />
-                </div>
-                <div>
-                  <TextField
-                    name="passwordConfirm"
-                    label="Confirm Password"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    disabled={loading}
-                    variant="filled"
-                    fullWidth
-                    error={validationErrors.passwordConfirm !== false}
-                    helperText={validationErrors.passwordConfirm}
-                    type="password"
-                  />
-                </div>
-              </Box>
-              <Box mb={2}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={loading}
-                  fullWidth
-                  type="submit"
-                >
-                  {!loading && <span>Register</span>}
-                  {loading && <Loader />}
-                </Button>
-              </Box>
-              <Typography variant="body2" align="center">
-                Already have an account? <Link to="/login">Log in</Link>.
-              </Typography>
-            </form>
-          )}
+    <>
+      <Helmet>
+        <title>Register | Laravel Material</title>
+      </Helmet>
+      <Container maxWidth="sm">
+        <Box mb={3}>
+          <Typography component="h3" variant="h3" align="center">
+            Register for the App
+          </Typography>
         </Box>
-      </Paper>
-    </Container>
+        <Paper elevation={3}>
+          <Box pt={2} pr={4} pb={4} pl={4}>
+            {success && (
+              <MuiAlert severity="success">
+                Registration successful.
+                <Link to="/" href="/">
+                  Please log in with your new email and password.
+                </Link>
+              </MuiAlert>
+            )}
+            {!success && (
+              <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+                {response.error && (
+                  <MuiAlert severity="error">{response.message}</MuiAlert>
+                )}
+                <Box mb={3}></Box>
+                <Box mb={2}>
+                  <Box mb={2}>
+                    <TextField
+                      name="name"
+                      label="Full Name"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={loading}
+                      variant="filled"
+                      fullWidth
+                      error={validationErrors.name !== false}
+                      helperText={validationErrors.name}
+                    />
+                  </Box>
+                  <Box mb={2}>
+                    <TextField
+                      name="email"
+                      label="Email Address"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={loading}
+                      variant="filled"
+                      fullWidth
+                      error={validationErrors.email !== false}
+                      helperText={validationErrors.email}
+                    />
+                  </Box>
+                  <Box mb={2}>
+                    <TextField
+                      name="password"
+                      label="Password"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={loading}
+                      variant="filled"
+                      fullWidth
+                      error={validationErrors.password !== false}
+                      helperText={validationErrors.password}
+                      type="password"
+                    />
+                  </Box>
+                  <Box mb={2}>
+                    <TextField
+                      name="passwordConfirm"
+                      label="Confirm Password"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={loading}
+                      variant="filled"
+                      fullWidth
+                      error={validationErrors.passwordConfirm !== false}
+                      helperText={validationErrors.passwordConfirm}
+                      type="password"
+                    />
+                  </Box>
+                </Box>
+                <Box mb={2}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={loading}
+                    fullWidth
+                    type="submit"
+                  >
+                    {!loading && <span>Register</span>}
+                    {loading && <Loader />}
+                  </Button>
+                </Box>
+                <Typography variant="body2" align="center">
+                  Already have an account? <Link to="/login">Log in</Link>.
+                </Typography>
+              </form>
+            )}
+          </Box>
+        </Paper>
+      </Container>
+    </>
   );
 }
 

@@ -134,7 +134,7 @@ function LoginForm(props) {
               </Box>
             )}
             <Box mb={2}>
-              <div>
+              <Box mb={2}>
                 <TextField
                   name="email"
                   label="Email Address"
@@ -146,8 +146,8 @@ function LoginForm(props) {
                   error={validationErrors.email !== false}
                   helperText={validationErrors.email}
                 />
-              </div>
-              <div>
+              </Box>
+              <Box mb={2}>
                 <TextField
                   name="password"
                   label="Password"
@@ -160,7 +160,7 @@ function LoginForm(props) {
                   helperText={validationErrors.password}
                   type="password"
                 />
-              </div>
+              </Box>
             </Box>
             <Box mb={2}>
               <Button
