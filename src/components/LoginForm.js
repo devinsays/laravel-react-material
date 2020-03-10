@@ -78,7 +78,6 @@ function LoginForm(props) {
 
     // Runs final form validation.
     const errors = {
-      ...validationErrors,
       email: emailValidationError(email),
       password: passwordValidationError(password)
     };

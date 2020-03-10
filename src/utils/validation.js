@@ -21,8 +21,12 @@ export const passwordValidationError = (value = '') => {
   return false;
 };
 
-// Checks all the values in the validationErrors object.
-// Returns true if there are no errors (i.e each value is false).
-export const formValidates = validationErrors => {
-  return Object.values(validationErrors).every(value => value === false);
+export const passwordConfirmValidationError = (value = '', password = '') => {
+  if (value.length < 6) {
+    return 'The password field must be at least 6 characters.';
+  }
+  if (password !== value) {
+    return 'Password confirmation does not match password.';
+  }
+  return false;
 };

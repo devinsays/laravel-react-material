@@ -11,9 +11,13 @@ import {
   Paper
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
+import isEqual from 'lodash/isEqual';
 
 import AuthService from '../services';
-import { passwordValidationError, formValidates } from '../utils/validation.js';
+import {
+  passwordValidationError,
+  passwordConfirmValidationError
+} from '../utils/validation.js';
 import Loader from '../components/Loader';
 
 function ForgotPassword(props) {
@@ -84,12 +88,23 @@ function ForgotPassword(props) {
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (formValidates(validationErrors)) {
+    // Runs final form validation.
+    const errors = {
+      password: passwordValidationError(password),
+      passwordConfirm: passwordConfirmValidationError(passwordConfirm, password)
+    };
+
+    // Compares the objects to see if validation messages have changed.
+    const validates = isEqual(validationErrors, errors);
+
+    if (validates) {
       setLoading(true);
       submit({
         password,
         password_confirmation: passwordConfirm
       });
+    } else {
+      setValidationErrors({ ...errors });
     }
   };
 

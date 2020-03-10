@@ -12,13 +12,14 @@ import {
   Paper
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
+import isEqual from 'lodash/isEqual';
 
 import AuthService from '../services';
 import {
   nameValidationError,
   emailValidationError,
   passwordValidationError,
-  formValidates
+  passwordConfirmValidationError
 } from '../utils/validation.js';
 import Loader from '../components/Loader';
 
@@ -98,11 +99,7 @@ function Register(props) {
 
     if (name === 'passwordConfirm') {
       setPasswordConfirm(value);
-      validationError = passwordValidationError(value);
-      // Ensures password and passwordConfirm match.
-      if (validationError === false && password !== value) {
-        validationError = 'Password confirmation does not match password.';
-      }
+      validationError = passwordConfirmValidationError(value, password);
     }
 
     // Set the validation error if validation failed.
@@ -114,9 +111,22 @@ function Register(props) {
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (formValidates(validationErrors)) {
+    // Runs final form validation.
+    const errors = {
+      name: nameValidationError(name),
+      email: emailValidationError(email),
+      password: passwordValidationError(password),
+      passwordConfirm: passwordConfirmValidationError(passwordConfirm, password)
+    };
+
+    // Compares the objects to see if validation messages have changed.
+    const validates = isEqual(validationErrors, errors);
+
+    if (validates) {
       setLoading(true);
       submit({ name, email, password, password_confirmation: passwordConfirm });
+    } else {
+      setValidationErrors({ ...errors });
     }
   };
 
