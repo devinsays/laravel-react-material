@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/laravel-react-material/precache-manifest.c21abd63a0f59c0b1675c9f2a5e45188.js"
+  "/laravel-react-material/precache-manifest.d03fb1a7a1cb36884389567bd2434429.js"
 );
 
 self.addEventListener('message', (event) => {
