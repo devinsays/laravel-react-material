@@ -94,7 +94,6 @@ function LoginForm(props) {
   };
 
   const submit = credentials => {
-    console.log(credentials);
     props.dispatch(AuthService.login(credentials)).catch(err => {
       const errors = Object.values(err.errors);
       errors.join(' ');
