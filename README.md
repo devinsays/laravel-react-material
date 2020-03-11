@@ -2,6 +2,10 @@
 
 An example Material UI app that integrates with an external REST API for authentication and data storage. This is a completely headless implementation for the frontend. The source code for the [Laravel API backend](https://github.com/devinsays/laravel-react-bootstrap) is also available on GitHub.
 
+View the demo: http://devinsays.github.io/laravel-react-material
+
+![Dashboard Screenshot](https://raw.githubusercontent.com/devinsays/laravel-react-material/master/public/screenshot.png)
+
 If you're interested in mobile development, check out the [Flutter version of this project](https://github.com/devinsays/flutter_todo).
 
 There is also a [native mobile app version of this project built with Flutter](https://github.com/devinsays/flutter_todo).
@@ -10,7 +14,9 @@ There is also a [native mobile app version of this project built with Flutter](h
 
 This app was scaffolded with [Create React App](https://reactjs.org/docs/create-a-new-react-app.html).
 
-To install the dependencies, run `yarn install`.
+`yarn install`
+
+Installs the dependencies.
 
 `yarn start`
 
