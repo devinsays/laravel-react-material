@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/laravel-react-material/static/css/main.1c4c35a3.chunk.css",
+    "main.js": "/laravel-react-material/static/js/main.9e789da3.chunk.js",
+    "main.js.map": "/laravel-react-material/static/js/main.9e789da3.chunk.js.map",
+    "runtime-main.js": "/laravel-react-material/static/js/runtime-main.327fcc56.js",
+    "runtime-main.js.map": "/laravel-react-material/static/js/runtime-main.327fcc56.js.map",
+    "static/js/2.15f3de1d.chunk.js": "/laravel-react-material/static/js/2.15f3de1d.chunk.js",
+    "static/js/2.15f3de1d.chunk.js.map": "/laravel-react-material/static/js/2.15f3de1d.chunk.js.map",
+    "index.html": "/laravel-react-material/index.html",
+    "precache-manifest.c21abd63a0f59c0b1675c9f2a5e45188.js": "/laravel-react-material/precache-manifest.c21abd63a0f59c0b1675c9f2a5e45188.js",
+    "service-worker.js": "/laravel-react-material/service-worker.js",
+    "static/css/main.1c4c35a3.chunk.css.map": "/laravel-react-material/static/css/main.1c4c35a3.chunk.css.map",
+    "static/js/2.15f3de1d.chunk.js.LICENSE.txt": "/laravel-react-material/static/js/2.15f3de1d.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.327fcc56.js",
+    "static/js/2.15f3de1d.chunk.js",
+    "static/css/main.1c4c35a3.chunk.css",
+    "static/js/main.9e789da3.chunk.js"
+  ]
+}
