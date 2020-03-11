@@ -7,40 +7,45 @@ import ResetPassword from '../pages/ResetPassword';
 import Archive from '../pages/Archive';
 import NoMatch from '../pages/NoMatch';
 
+// Base url is set so routing still works when deployed
+// to GitHub pages. You can remove the variable
+// and use relative urls if you're deploying to a TLD.
+const base = process.env.PUBLIC_URL || '/';
+
 const routes = [
   {
-    path: '/',
+    path: base,
     exact: true,
     auth: true,
     component: Dashboard,
     fallback: Home
   },
   {
-    path: '/login',
+    path: `${base}/login`,
     exact: true,
     auth: false,
     component: Login
   },
   {
-    path: '/register',
+    path: `${base}/register`,
     exact: true,
     auth: false,
     component: Register
   },
   {
-    path: '/forgot-password',
+    path: `${base}/forgot-password`,
     exact: true,
     auth: false,
     component: ForgotPassword
   },
   {
-    path: '/reset-password',
+    path: `${base}/reset-password`,
     exact: true,
     auth: false,
     component: ResetPassword
   },
   {
-    path: '/archive',
+    path: `${base}/archive`,
     exact: true,
     auth: true,
     component: Archive
