@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c4e39db15d867dcd23dc5bde020b152e",
+    "revision": "06c0cfe99e8b891b3b67d28256694a4d",
     "url": "/laravel-react-material/index.html"
   },
   {
-    "revision": "8b150470e821fb0fcc88",
+    "revision": "9a897da4afe63af1949c",
     "url": "/laravel-react-material/static/css/main.d2870ac4.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/laravel-react-material/static/js/2.e72125d5.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "8b150470e821fb0fcc88",
-    "url": "/laravel-react-material/static/js/main.324bab28.chunk.js"
+    "revision": "9a897da4afe63af1949c",
+    "url": "/laravel-react-material/static/js/main.9f263873.chunk.js"
   },
   {
     "revision": "d6f00ec1998f42f1f79c",

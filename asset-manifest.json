@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/laravel-react-material/static/css/main.d2870ac4.chunk.css",
-    "main.js": "/laravel-react-material/static/js/main.324bab28.chunk.js",
-    "main.js.map": "/laravel-react-material/static/js/main.324bab28.chunk.js.map",
+    "main.js": "/laravel-react-material/static/js/main.9f263873.chunk.js",
+    "main.js.map": "/laravel-react-material/static/js/main.9f263873.chunk.js.map",
     "runtime-main.js": "/laravel-react-material/static/js/runtime-main.50ba2421.js",
     "runtime-main.js.map": "/laravel-react-material/static/js/runtime-main.50ba2421.js.map",
     "static/js/2.e72125d5.chunk.js": "/laravel-react-material/static/js/2.e72125d5.chunk.js",
     "static/js/2.e72125d5.chunk.js.map": "/laravel-react-material/static/js/2.e72125d5.chunk.js.map",
     "index.html": "/laravel-react-material/index.html",
-    "precache-manifest.2db4840e5efcb443577df9662bdae9ca.js": "/laravel-react-material/precache-manifest.2db4840e5efcb443577df9662bdae9ca.js",
+    "precache-manifest.2be953854c9ff304e652ae8d01b47c81.js": "/laravel-react-material/precache-manifest.2be953854c9ff304e652ae8d01b47c81.js",
     "service-worker.js": "/laravel-react-material/service-worker.js",
     "static/css/main.d2870ac4.chunk.css.map": "/laravel-react-material/static/css/main.d2870ac4.chunk.css.map",
     "static/js/2.e72125d5.chunk.js.LICENSE.txt": "/laravel-react-material/static/js/2.e72125d5.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.50ba2421.js",
     "static/js/2.e72125d5.chunk.js",
     "static/css/main.d2870ac4.chunk.css",
-    "static/js/main.324bab28.chunk.js"
+    "static/js/main.9f263873.chunk.js"
   ]
 }
