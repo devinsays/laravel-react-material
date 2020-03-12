@@ -5,8 +5,13 @@ import PublicRoute from './Public';
 import PrivateRoute from './Private';
 import SplitRoute from './Split';
 
+// This is config for GitHub Pages.
+// If you are deploying to a top level domain,
+// you can remove the basename prop from the Router.
+const base = process.env.PUBLIC_URL || '/';
+
 const Routes = () => (
-  <Router>
+  <Router basename={base}>
     <Switch>
       {routes.map(route => {
         if (route.auth && route.fallback) {
